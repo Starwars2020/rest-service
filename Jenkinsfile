@@ -29,12 +29,14 @@ podTemplate(label: 'jenkins-slave-pod',
             [url: 'https://github.com/Starwars2020/rest-service.git', credentialsId: '$githubCredential']
           ],
         ])
+		echo 'Stage#1: Clone repository ..End'
       }
     }
     
     stage('Build a Gradle project') {
       container('gradle') {
         sh './gradlew clean build'
+		echo 'Stage#2: Build a Gradle project ..End'
       }
     }
     
@@ -43,6 +45,7 @@ podTemplate(label: 'jenkins-slave-pod',
         withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
           sh "docker build -t $registry/rest-sample-app:1.0 -f ./Dockerfile ."
         }
+		echo 'Stage#3: Build docker image ..End'
       }
     }
     
@@ -51,6 +54,7 @@ podTemplate(label: 'jenkins-slave-pod',
         withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
           docker.image("$registry/rest-sample-app:1.0").push()
         }
+		echo 'Stage#4: Push docker image ..End'
       }
     }
   }
