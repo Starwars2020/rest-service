@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rest-sample-app
+  namespace: default
+  labels:
+    app: rest-sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rest-sample-app
+  template:
+    metadata:
+      labels:
+        app: rest-sample-app
+    spec:
+      containers:
+      - name: rest-sample-app
+        image: localhost:5000/rest-sample-app:1.0
+        ports:
+        - containerPort: 8080
