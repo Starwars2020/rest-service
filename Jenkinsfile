@@ -23,7 +23,7 @@ podTemplate(label: 'jenkins-slave-pod',
             container('git') {
                 // https://gitlab.com/gitlab-org/gitlab-foss/issues/38910
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/main']],
+                    branches: [[name: '*/*']],
                     userRemoteConfigs: [
                         [url: 'https://github.com/Starwars2020/rest-service.git', credentialsId: '$githubCredential']
                     ],
