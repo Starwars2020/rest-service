@@ -23,6 +23,7 @@ podTemplate(label: 'jenkins-slave-pod',
     stage('Clone repository') {
       container('git') {
         // https://gitlab.com/gitlab-org/gitlab-foss/issues/38910
+        echo 'Stage#1: Clone repository ..Start'
         checkout([$class: 'GitSCM',
           branches: [[name: '*/*']],
           userRemoteConfigs: [
@@ -36,7 +37,6 @@ podTemplate(label: 'jenkins-slave-pod',
     stage('Build a Gradle project') {
       container('gradle') {
         sh './gradlew clean build'
-        echo 'Stage#2: Build a Gradle project ..End'
       }
     }
     
@@ -45,7 +45,6 @@ podTemplate(label: 'jenkins-slave-pod',
         withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
           sh "docker build -t $registry/rest-sample-app:1.0 -f ./Dockerfile ."
         }
-        echo 'Stage#3: Build docker image ..End'
       }
     }
     
@@ -54,7 +53,6 @@ podTemplate(label: 'jenkins-slave-pod',
         withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
           docker.image("$registry/rest-sample-app:1.0").push()
         }
-        echo 'Stage#4: Push docker image ..End'
       }
     }
   }
