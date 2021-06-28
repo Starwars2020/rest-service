@@ -1,9 +1,9 @@
+#!/usr/bin/groovy
+
 podTemplate(label: 'jenkins-slave-pod', 
   containers: [
-    //containerTemplate(name: 'git', image: 'ubuntu/20.10', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
-    //containerTemplate(name: 'maven', image: 'maven:3.6.2-jdk-8', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'maven', image: 'ubuntu/20.10', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'maven', image: 'maven:3.8.1-jdk-8', command: 'cat', ttyEnabled: true),
 	  containerTemplate(name: 'gradle', image: 'gradle:latest', command: 'cat', ttyEnabled: true), 
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ],
@@ -12,15 +12,9 @@ podTemplate(label: 'jenkins-slave-pod',
   ]
 )
 
-pipeline {
-  agent any
-
-  tools {
-    maven 'maven-3.8.1'
-    jdk   'jdk8u221'
-  }
+{
+  node('jenkins-slave-pod') {
   
-  stages {
     def registry = "localhost:5000"
     def registryCredential = ""
     def githubCredential = "Github-Account"
