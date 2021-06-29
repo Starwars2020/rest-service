@@ -12,7 +12,7 @@ podTemplate(label: 'docker-build',
         //def appImage
         
         stage('Checkout'){
-            container('github'){
+            container('git'){
                 checkout scm
             }
         }
