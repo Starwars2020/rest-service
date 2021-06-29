@@ -8,8 +8,8 @@ podTemplate(label: 'docker-build',
   ]
 ) {
     node('docker-build') {
-        def dockerHubCred = <your_dockerhub_cred>
-        def appImage
+        //def dockerHubCred = <your_dockerhub_cred>
+        //def appImage
         
         stage('Checkout'){
             container('git'){
