@@ -13,7 +13,8 @@ podTemplate(label: 'docker-build',
         
         stage('Checkout'){
             container('git'){
-                checkout scm
+                echo 'git checkout'
+				checkout scm
             }
         }
         
