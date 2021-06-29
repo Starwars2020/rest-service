@@ -34,29 +34,29 @@ podTemplate(label: 'jenkins-slave-pod',
       }
     }
     
-    stage('Build a Gradle project') {
-      container('gradle') {
-        sh './gradlew clean build'
-        echo 'Stage#2: Build a Gradle project ..End'
-      }
-    }
+    //stage('Build a Gradle project') {
+    //  container('gradle') {
+    //    sh './gradlew clean build'
+    //    echo 'Stage#2: Build a Gradle project ..End'
+    //  }
+    //}
     
-    stage('Build docker image') {
-      container('docker') {
-        withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
-          sh "docker build -t $registry/rest-sample-app:1.0 -f ./Dockerfile ."
-        }
-        echo 'Stage#3: Build docker image ..End'
-      }
-    }
+    //stage('Build docker image') {
+    //  container('docker') {
+    //    withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
+    //      sh "docker build -t $registry/rest-sample-app:1.0 -f ./Dockerfile ."
+    //    }
+    //    echo 'Stage#3: Build docker image ..End'
+    //  }
+    //}
     
-    stage('Push docker image') {
-      container('docker') {
-        withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
-          docker.image("$registry/rest-sample-app:1.0").push()
-        }
-        echo 'Stage#4: Push docker image ..End'
-      }
-    }
+    //stage('Push docker image') {
+    //  container('docker') {
+    //    withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
+    //      docker.image("$registry/rest-sample-app:1.0").push()
+    //    }
+    //    echo 'Stage#4: Push docker image ..End'
+    //  }
+    //}
   }
 }
