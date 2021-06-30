@@ -9,7 +9,7 @@ console("=========== START ==========")
 podTemplate(
 	label: label, 
 	containers: [
-		containerTemplate(name: "git", image: "alpine/git", ttyEnabled: true, command: "cat")
+		containerTemplate(name: "git", image: "openjdk:8-jdk-alpine", ttyEnabled: true, command: "cat")
 	],
 	volumes: [
 		hostPathVolume(hostPath: "/var/run/docker.sock", mountPath: "/var/run/docker.sock")
@@ -20,11 +20,8 @@ podTemplate(
 		try {
 			stage("Checkout") {
 			  console("== START: checkout==")
-				container("docker") {
-					checkout([$class: 'GitSCM',
-            branches: [[name: '*/main']],
-            extensions: [],
-            userRemoteConfigs: [[url: 'https://github.com/jenkinsci/git-plugin']]])
+				container("git") {
+					checkout scm
 				}
 			}
 		} catch(e) {
