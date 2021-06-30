@@ -1,4 +1,4 @@
-def label = "devops-${UUID.randomUUID().toString()}"
+def label = "jenkins-slave-pod"
 
 def console(msg) {
   echo msg
