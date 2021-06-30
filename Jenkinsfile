@@ -24,7 +24,7 @@ spec:
 def steps =[:]
 
 podTemplate(yaml:GLOBAL_POD_TEMPLATE,nodeSelector:'minikube',
-   workspaceVolume:hostPathWorkspaceVolume("/home/osboxes/lab/workspace")){
+   workspaceVolume:hostPathWorkspaceVolume("/home/osboxes/lab/jenkins/workspace")){
     node(POD_LABEL) {
         stage('Build'){
             steps('Build test container') {
