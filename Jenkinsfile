@@ -5,21 +5,21 @@ spec:
   tolerations:
   - key: "builder"
     operator: "Equal"
-	value: "true"
-	effect: "NoSchedule"
+    value: "true"
+    effect: "NoSchedule"
   containers:
   - name: test
     image: ubuntu:latest
-	command:
-	- sleep
-	args:
-	- infinity
+    command:
+    - sleep
+    args:
+    - infinity
   - name: test2
     image: ubuntu:latest
-	command:
-	- sleep
-	args:
-	- infinity
+    command:
+    - sleep
+    args:
+    - infinity
 '''
 def steps =[:]
 
