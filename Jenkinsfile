@@ -22,7 +22,7 @@ podTemplate(
 			  console("== START: checkout==")
 				container("docker") {
 					checkout([$class: 'GitSCM',
-            branches: [[name: '*']],
+            branches: [[name: '*/main']],
             extensions: [],
             userRemoteConfigs: [[url: 'https://github.com/jenkinsci/git-plugin']]])
 					}
