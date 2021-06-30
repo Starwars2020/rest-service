@@ -9,7 +9,7 @@ console("=========== START ==========")
 podTemplate(
 	label: label, 
 	containers: [
-		containerTemplate(name: "git", image: "openjdk:8-jdk-alpine", ttyEnabled: true, command: "cat")
+		containerTemplate(name: 'gradle', image: 'gradle:latest', command: 'cat', ttyEnabled: true)
 	],
 	volumes: [
 		hostPathVolume(hostPath: "/var/run/docker.sock", mountPath: "/var/run/docker.sock")
@@ -20,8 +20,8 @@ podTemplate(
 		try {
 			stage("Checkout") {
 			  console("== START: checkout==")
-				container("git") {
-					checkout scm
+				container("gradle") {
+					sh './gradlew clean build'
 				}
 			}
 		} catch(e) {
