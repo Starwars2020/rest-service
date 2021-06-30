@@ -9,28 +9,22 @@ console("=========== START ==========")
 podTemplate(
 	label: label, 
 	containers: [
-		containerTemplate(name: "docker", image: "docker:stable", ttyEnabled: true, command: "cat")
+		containerTemplate(name: "git", image: "alpine/git", ttyEnabled: true, command: "cat")
 	],
 	volumes: [
-		hostPathVolume(hostPath: "/var/run/docker.sock", mountPath: "/var/run/docker.sock"),
-		hostPathVolume(hostPath: "/etc/docker/certs.d", mountPath: "/etc/docker/certs.d")
+		hostPathVolume(hostPath: "/var/run/docker.sock", mountPath: "/var/run/docker.sock")
 	]
 ) 
 {
 	node(label) {
-		def dockerRegistry = "https://localhost:5000"
-		def org = "localhost:5000"
-		def credential = ""
-		def image = "rest-sample-app"
-		def tag = "1.0"
-
 		try {
-			stage("Build & Push image") {
-			  console("== START: build/push image==")
+			stage("Checkout") {
+			  console("== START: checkout==")
 				container("docker") {
-					docker.withRegistry("${dockerRegistry}", "${credential}") {
-						sh "docker build -t ${image}:${tag} ."
-						sh "docker push ${image}:${tag}"
+					checkout([$class: 'GitSCM',
+            branches: [[name: '*']],
+            extensions: [],
+            userRemoteConfigs: [[url: 'https://github.com/jenkinsci/git-plugin']]])
 					}
 				}
 			}
