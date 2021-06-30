@@ -25,7 +25,6 @@ podTemplate(
             branches: [[name: '*/main']],
             extensions: [],
             userRemoteConfigs: [[url: 'https://github.com/jenkinsci/git-plugin']]])
-					}
 				}
 			}
 		} catch(e) {
