@@ -18,6 +18,9 @@ dependencies {
 }
 
 docker {
+	registryCredentials {
+		url = 'https://localhost:5000'
+	}
 	docker build -t 'localhost:5000/rest-sample-app:1.0' .
 	docker images 'localhost:5000/rest-sample-app:1.0'
 	docker push 'localhost:5000/rest-sample-app:1.0'
