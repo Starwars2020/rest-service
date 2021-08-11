@@ -18,12 +18,9 @@ dependencies {
 }
 
 docker {
-	registryCredentials {
-		url = 'https://localhost:5000'
-	}
-	docker build -t 'localhost:5000/rest-sample-app:1.0' .
-	docker images 'localhost:5000/rest-sample-app:1.0'
-	docker push 'localhost:5000/rest-sample-app:1.0'
+	name "localhost:5000/rest-sample-app:1.0"
+	files "build/libs/${bootJar.archiveFileName.get()}"
+	buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
 }
 
 test {
