@@ -1,7 +1,11 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.3'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'org.springframework.boot' version '2.4.3'
+	id 'base'
+	id 'com.palantir.docker' version '0.26.0'
+	id 'com.palantir.docker-run' version '0.26.0'
+	id 'pl.allegro.tech.build.axion-release' version '1.12.0'
 }
 
 group = 'com.example'
@@ -16,6 +20,20 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
+
+docker {
+	name "localhost:5000/rest-sample-app:1.0"
+	files "build/libs/${bootJar.archiveFileName.get()}"
+	buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
+}
+
+#dockerRun {
+#	name "${project.name}"
+#	image "${project.name}:${project.version}"
+#	ports 'localhost:5000'
+#	clean true
+#	daemonize false
+#}
 
 test {
 	useJUnitPlatform()
