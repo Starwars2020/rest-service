@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'org.springframework.boot' version '2.4.3'
+	id 'com.palantir.docker' version '0.22.1'
+	id 'com.palantir.docker-run' version '0.22.1'
 }
 
 group = 'com.example'
@@ -18,9 +20,9 @@ dependencies {
 }
 
 docker {
-	name "localhost:5000/rest-sample-app:1.0"
-	files "build/libs/${bootJar.archiveFileName.get()}"
-	buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
+	name 'localhost:5000/rest-sample-app:1.0'
+	files 'build/libs/${bootJar.archiveFileName.get()}'
+	tag 'DockerHub', "localhost:5000/rest-sample-app:1.0"
 }
 
 test {
