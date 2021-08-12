@@ -1,4 +1,4 @@
-def label = "jenkins-slave"
+def label = "worker-${UUID.randomUUID().toString()}"
 
 def console(msg) {
   echo msg
@@ -6,9 +6,7 @@ def console(msg) {
 
 console("=========== START ==========")
 
-podTemplate(
-  label: label, 
-  containers: [
+podTemplate(containers: [
     containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true),
     containerTemplate(name: "docker", image: "docker:stable", ttyEnabled: true, command: "cat")
   ],
@@ -18,7 +16,7 @@ podTemplate(
   ]
 ) 
 {
-  node(label) {
+  node(POD_LABEL) {
     def dockerRegistry = "https://localhost:5000"
     def org = "localhost:5000"
     def credential = ""
