@@ -28,7 +28,7 @@ test {
 docker {
 	println("gradle docker start ...")
 	name "rest-sample-app:1.0"
-	files tasks.bootJar.outputs.files
+	files "build/libs"
 	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 }
 
