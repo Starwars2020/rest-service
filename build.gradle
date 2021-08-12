@@ -33,7 +33,19 @@ docker {
 	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 }
 
-String dockerSockGroupId = ""
+Process process
+if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
+	process = "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock alpine stat -c %g /var/run/docker.sock".execute()
+} else if (DefaultNativePlatform.getCurrentOperatingSystem().isLinux()) {
+	process = "stat -c %g /var/run/docker.sock".execute()
+} else {
+	throw new GradleException("Unsupported operating system. No way to find group of /var/run/docker.sock.")
+}
+
+def out = new ByteArrayOutputStream()
+process.waitForProcessOutput(out, System.err)
+String dockerSockGroupId = out.toString().trim()
+
 dockerRun {
 	println("gradle dockerRun start ...")
 	name "rest-sample-app"
