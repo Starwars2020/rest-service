@@ -7,7 +7,7 @@ def console(msg) {
 console("=========== START ==========")
 
 podTemplate(
-  label: label, cloud: 'jenkins-master',
+  label: label, 
   containers: [
     containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true)
   ],
