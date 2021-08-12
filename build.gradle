@@ -38,7 +38,7 @@ dockerRun {
 	println("gradle dockerRun start ...")
 	name "rest-sample-app"
 	image "rest-sample-app:1.0"
-	ports '8080:8080'
+	ports '5000:5000'
 	clean true
 	daemonize false
 }
