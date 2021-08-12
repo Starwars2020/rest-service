@@ -7,7 +7,7 @@ def console(msg) {
 console("=========== START ==========")
 
 podTemplate(
-  label: label, 
+  label: label, cloud: 'minikube',
   containers: [
     containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true)
   ],
