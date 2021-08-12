@@ -26,8 +26,10 @@ test {
 }
 
 docker {
-	println("gradle docker-plugin start = rest-service-${project.version}")
-	name "rest-service-${project.version}"
+	println("gradle docker start ...")
+	println("gradle docker start ... $tasks.bootJar.outputs.files")
+	println("gradle docker start ... $tasks.bootJar.outputs.files.singleFile.name")
+	name "rest-sample-app:1.0"
 	files tasks.bootJar.outputs.files
 	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 }
