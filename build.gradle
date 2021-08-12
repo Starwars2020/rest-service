@@ -29,14 +29,14 @@ docker {
 	println("gradle docker start ...")
 	name "rest-sample-app:1.0"
 	files tasks.bootJar.outputs.files
-	tag 'DockerHub', "localhost:5000/rest-sample-app:1.0"
+	tag 'DockerHub', "localhost:5000/rest-sample-app:1.1"
 	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 }
 
 dockerRun {
 	println("gradle dockerRun start ...")
 	name "rest-sample-app"
-	image "rest-sample-app:1.0"
+	image "rest-sample-app:1.1"
 	ports '8080:8080'
 	clean true
 	daemonize false
