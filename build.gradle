@@ -1,3 +1,5 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
+
 plugins {
 	id 'java'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -33,11 +35,11 @@ docker {
 
 Process process
 if (DefaultNativePlatform.getCurrentOperatingSystem().isWindows()) {
-    process = "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock alpine stat -c %g /var/run/docker.sock".execute()
+	process = "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock alpine stat -c %g /var/run/docker.sock".execute()
 } else if (DefaultNativePlatform.getCurrentOperatingSystem().isLinux()) {
-    process = "stat -c %g /var/run/docker.sock".execute()
+	process = "stat -c %g /var/run/docker.sock".execute()
 } else {
-    throw new GradleException("Unsupported operating system. No way to find group of /var/run/docker.sock.")
+	throw new GradleException("Unsupported operating system. No way to find group of /var/run/docker.sock.")
 }
 
 def out = new ByteArrayOutputStream()
@@ -46,10 +48,10 @@ String dockerSockGroupId = out.toString().trim()
 
 String extraPrefix = DefaultNativePlatform.getCurrentOperatingSystem().isWindows() ? '/' : ''
 dockerRun {
-    name "rest-sample-app"
-    image "rest-sample-app:1.0"
-    ports '8080:8080'
-    clean true
-    daemonize false
-    arguments '-v', "$extraPrefix/var/run/docker.sock:/var/run/docker.sock", '--group-add', dockerSockGroupId
+	name "rest-sample-app"
+	image "rest-sample-app:1.0"
+	ports '8080:8080'
+	clean true
+	daemonize false
+	arguments '-v', "$extraPrefix/var/run/docker.sock:/var/run/docker.sock", '--group-add', dockerSockGroupId
 }
