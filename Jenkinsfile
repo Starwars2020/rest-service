@@ -10,7 +10,7 @@ podTemplate(
   label: label, 
   containers: [
     containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true),
-	containerTemplate(name: "docker", image: "docker:stable", ttyEnabled: true, command: "cat")
+    containerTemplate(name: "docker", image: "docker:stable", ttyEnabled: true, command: "cat")
   ],
   volumes: [
     hostPathVolume(mountPath: "/usr/bin/docker", hostPath: "/usr/bin/docker"),
