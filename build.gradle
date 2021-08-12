@@ -29,7 +29,6 @@ docker {
 	println("gradle docker start ...")
 	name "rest-sample-app:1.0"
 	files tasks.bootJar.outputs.files
-	tag 'DockerHub', "localhost:5000/rest-sample-app:1.0"
 	buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
 }
 
