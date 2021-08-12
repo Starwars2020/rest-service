@@ -18,7 +18,7 @@ podTemplate(
   ]
 ) 
 {
-  node(POD_LABEL) {
+  node(label) {
     def dockerRegistry = "https://localhost:5000"
     def org = "localhost:5000"
     def credential = ""
