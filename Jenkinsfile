@@ -1,4 +1,4 @@
-def label = "jenkins-slave"
+def label = "slave"
 
 def console(msg) {
   echo msg
@@ -7,7 +7,7 @@ def console(msg) {
 console("=========== START ==========")
 
 podTemplate(
-  label: label, cloud: 'minikube',
+  label: label, cloud: 'master',
   containers: [
     containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true)
   ],
