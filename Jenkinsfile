@@ -6,7 +6,9 @@ def console(msg) {
 
 console("=========== START ==========")
 
-podTemplate(containers: [
+podTemplate(
+    label: label, 
+    containers: [
     containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true),
     containerTemplate(name: "docker", image: "docker:stable", ttyEnabled: true, command: "cat")
   ],
