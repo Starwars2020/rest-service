@@ -9,12 +9,12 @@ console("=========== START ==========")
 podTemplate(
     label: label, 
     containers: [
-    containerTemplate(name: 'gradle', image: 'gradle:6.5.1', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: "docker", image: "docker:stable", ttyEnabled: true, command: "cat")
+    containerTemplate(name: "openjdk", image: "openjdk:8-jdk-alpine"),
+    containerTemplate(name: "docker", image: "docker:20.10.5")
   ],
   volumes: [
     hostPathVolume(mountPath: "/usr/bin/docker", hostPath: "/usr/bin/docker"),
-    hostPathVolume(hostPath: "/var/run/docker.sock", mountPath: "/var/run/docker.sock")
+    hostPathVolume(mountPath: "/var/run/docker.sock", hostPath: "/var/run/docker.sock")
   ]
 ) 
 {
@@ -28,7 +28,7 @@ podTemplate(
     try {
       stage("Checkout") {
         console("== START: checkout==")
-        container("gradle") {
+        container("openjdk") {
           sh './gradlew clean build'
         }
       }
