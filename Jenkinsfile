@@ -2,7 +2,7 @@ pipeline {
     agent { node { label 'GLOBAL_POD_TEMPLATE_TEST' } }
     stages {
         stage('Build') {
-            paralle {
+            parallel {
                 stage('Build test container') {
                     steps {
                         container('test') {
