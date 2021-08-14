@@ -1,17 +1,8 @@
 podTemplate(label: 'docker-build', 
   containers: [
-    containerTemplate(
-      name: 'git',
-      image: 'alpine/git',
-      command: 'cat',
-      ttyEnabled: true
-    ),
-    containerTemplate(
-      name: 'docker',
-      image: 'docker',
-      command: 'cat',
-      ttyEnabled: true
-    ),
+    containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'gradle', image: 'gradle:latest', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
   ],
   volumes: [ 
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
@@ -24,13 +15,16 @@ podTemplate(label: 'docker-build',
         stage('Checkout'){
             container('git'){
                 checkout scm
-                script {
-                    sh './gradlew clean build'
-                }
             }
         }
         
-        stage('Build'){
+        stage('Gradle Build') {
+            container('gradle') {
+                sh './gradlew clean build'
+            }
+        }
+
+        stage('Docker Build'){
             container('docker'){
                 script {
                     appImage = docker.build("localhost:5000/rest-sample-app:1.0")
@@ -48,7 +42,7 @@ podTemplate(label: 'docker-build',
             }
         }
 
-        //stage('Push'){
+        //stage('Docker Push'){
         //    container('docker'){
         //        script {
         //            docker.withRegistry('https://localhost:5000', dockerHubCred){
