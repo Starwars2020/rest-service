@@ -21,7 +21,7 @@ podTemplate(label: 'docker-build',
         stage('Gradle Build') {
             container('gradle') {
                 script {
-                    sh './gradlew clean build'
+                    ./gradlew clean build
                 }
             }
         }
