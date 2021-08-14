@@ -1,6 +1,7 @@
 podTemplate(label: 'docker-build', 
   containers: [
     containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'gradle', image: 'gradle:5.6.1-jdk-8', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
   ],
   volumes: [ 
@@ -14,14 +15,13 @@ podTemplate(label: 'docker-build',
         stage('Checkout'){
             container('git'){
                 checkout scm
-                java {
-                    toolchain {
-                        withGradle {
-                            sh 'chmod 755 gradlew'
-                            sh './gradlew clean build'
-                        }
-                    }
-                }
+            }
+        }
+        
+        stage('Gradle Build'){
+            container('gradle'){
+                sh 'chmod 755 gradlew'
+                sh './gradlew clean build'
             }
         }
         
