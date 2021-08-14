@@ -24,6 +24,9 @@ podTemplate(label: 'docker-build',
         stage('Checkout'){
             container('git'){
                 checkout scm
+                script {
+                    sh './gradlew clean build'
+                }
             }
         }
         
