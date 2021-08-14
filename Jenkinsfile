@@ -1,47 +1,60 @@
-GLOBAL_POD_TEMPLATE_TEST='''
-apiVersion: v1
-kind: Pod
-spec:
-  tolerations:
-  - key: "builder"
-    operator: "Equal"
-    value: "true"
-    effect: "NoSchedule"
-  containers:
-  - name: test
-    image: ubuntu:latest
-    command:
-    - sleep
-    args:
-    - infinity
-  - name: test2
-    image: ubuntu:latest
-    command:
-    - sleep
-    args:
-    - infinity
-'''
-def steps =[:]
-
-podTemplate(
-    yaml:GLOBAL_POD_TEMPLATE_TEST,
-    nodeSelector:'minikube',
-	workspaceVolume:hostPathWorkspaceVolume("/data/workspace")
-) 
-{
-    node(POD_LABEL) {
-        stage('Build') {
-            stages["Build test container"] = {
-                container("test") {
-                    sh "echo hello from $POD_CONTAINER"
-                }
+podTemplate(label: 'docker-build', 
+  containers: [
+    containerTemplate(
+      name: 'git',
+      image: 'alpine/git',
+      command: 'cat',
+      ttyEnabled: true
+    ),
+    containerTemplate(
+      name: 'docker',
+      image: 'docker',
+      command: 'cat',
+      ttyEnabled: true
+    ),
+  ],
+  volumes: [ 
+    hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
+  ]
+) {
+    node('docker-build') {
+        def dockerHubCred = ""
+        def appImage
+        
+        stage('Checkout'){
+            container('git'){
+                checkout scm
             }
-            stages["Build test2 container"] = {
-                container("test2") {
-                    sh "echo hello from $POD_CONTAINER"
-                }
-            }
-			parallel steps
         }
+        
+        stage('Build'){
+            container('docker'){
+                script {
+                    appImage = docker.build("localhost:5000/rest-sample-app:1.0")
+                }
+            }
+        }
+        
+        stage('Test'){
+            container('docker'){
+                script {
+                    appImage.inside {
+                        sh 'echo "hello"'
+                    }
+                }
+            }
+        }
+
+        //stage('Push'){
+        //    container('docker'){
+        //        script {
+        //            docker.withRegistry('https://localhost:5000', dockerHubCred){
+        //                appImage.push("${env.BUILD_NUMBER}")
+        //                appImage.push("latest")
+        //            }
+        //        }
+        //    }
+        //}
     }
+    
 }
