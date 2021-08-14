@@ -1,6 +1,6 @@
 podTemplate(label: 'docker-build', 
   containers: [
-    containerTemplate(name: 'git', image: 'openjdk-8-jdk-alpine/git', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'git', image: 'openjdk-8-alpine/git', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
   ],
   volumes: [ 
