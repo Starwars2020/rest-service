@@ -22,7 +22,7 @@ podTemplate(label: 'docker-build',
         stage('Build'){
             container('gradle'){
                 sh 'chmod 755 gradlew'
-                sh 'gradlew clean build'
+                sh './gradlew clean build'
             }
         }
         
