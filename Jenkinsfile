@@ -14,16 +14,13 @@ podTemplate(label: 'docker-build',
         stage('Checkout'){
             container('git'){
                 checkout scm
+                withGradle {
+                    sh 'chmod 755 gradlew'
+                    sh './gradlew clean build'
+                }
             }
         }
         
-        stage('Gradle Build') {
-            withGradle {
-                sh 'chmod 755 gradlew'
-                sh './gradlew clean build'
-            }
-        }
-
         stage('Docker Build'){
             container('docker'){
                 script {
