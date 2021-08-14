@@ -5,6 +5,7 @@ podTemplate(label: 'docker-build',
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
   ],
   volumes: [ 
+    //hostPathVolume(mountPath: '/home/gradle/.gradle', hostPath: '/home/admin/k8s/jenkins/.gradle'),
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
   ]
 ) {
@@ -21,7 +22,7 @@ podTemplate(label: 'docker-build',
         stage('Build'){
             container('gradle'){
                 sh 'chmod 755 gradlew'
-                sh './gradlew clean build'
+                sh 'gradlew clean build'
             }
         }
         
