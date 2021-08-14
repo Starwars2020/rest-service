@@ -1,7 +1,6 @@
 podTemplate(label: 'docker-build', 
   containers: [
     containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'gradle', image: 'gradle:latest', command: 'cat', ttyEnabled: true),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
   ],
   volumes: [ 
