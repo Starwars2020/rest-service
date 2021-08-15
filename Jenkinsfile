@@ -25,7 +25,7 @@ podTemplate(
         try {
             stage('Clone repository') {
                 container('git') {
-				    checkout scm
+                    checkout scm
                 }
             }
 	
