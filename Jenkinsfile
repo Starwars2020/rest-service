@@ -27,7 +27,7 @@ podTemplate(
     stage('Build docker image') {
       container('docker') {
         withDockerRegistry([ credentialsId: "$registryCredential", url: "http://$registry" ]) {
-          sh "docker build -t "$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAGS" -f ./Dockerfile ."
+          sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAGS} -f ./Dockerfile ."
         }
       }
     }
