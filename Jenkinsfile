@@ -17,6 +17,10 @@ podTemplate(
       hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
     ]) {
   node('jenkins-slave') {
+    stage('Checkout') {
+      checkout scm
+    }
+	
     stage('Build'){
       container('gradle'){
         sh 'chmod 755 gradlew'
