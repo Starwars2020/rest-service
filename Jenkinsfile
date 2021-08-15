@@ -25,12 +25,13 @@ podTemplate(
         try {
             stage('Clone repository') {
                 container('git') {
+				    checkout scm
                 }
             }
 	
             stage('Build a gradle project'){
                 container('gradle'){
-                    //sh 'chmod 755 gradlew'
+                    sh 'chmod 755 gradlew'
                     sh './gradlew clean build'
                 }
             }
