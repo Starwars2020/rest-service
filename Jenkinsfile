@@ -25,13 +25,6 @@ podTemplate(
         try {
             stage('Clone repository') {
                 container('git') {
-                    checkout scm
-                    //checkout([$class: 'GitSCM',
-                    //    branches: [[name: '*/*']],
-                    //    userRemoteConfigs: [
-                    //        [url: '$githubRepository', credentialsId: '$githubCredential']
-                    //    ],
-                    //])
                 }
             }
 	
@@ -63,8 +56,9 @@ podTemplate(
                     sh "kubectl delete -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
                     sh "kubectl delete -f rest-sample-app-service.yaml -n ${NAMESPACE}"
                     sh "kubectl delete -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
-                    sh "kubectl create -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
+					sh "kubectl delete validatingwebhookconfiguration ingress-nginx-admission"
 				    sh "sleep 5"
+                    sh "kubectl create -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
                     sh "kubectl create -f rest-sample-app-service.yaml -n ${NAMESPACE}"
                     sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
                 }
