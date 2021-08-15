@@ -9,7 +9,6 @@ def DATE = new Date();
 
 podTemplate(label: 'jenkins-slave', 
             containers: [
-                //containerTemplate(name: 'git', image: 'alpine/git', command: 'cat', ttyEnabled: true),
                 containerTemplate(name: 'gradle', image: 'gradle:5.6-jdk8', command: 'cat', ttyEnabled: true),
                 containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
 				containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.15.3', command: 'cat', ttyEnabled: true)
@@ -19,9 +18,7 @@ podTemplate(label: 'jenkins-slave',
             ]) {
     node('jenkins-slave') {
         stage('Checkout'){
-            //container('git'){
-                checkout scm
-            //}
+            checkout scm
         }
         
         stage('Build'){
@@ -33,11 +30,9 @@ podTemplate(label: 'jenkins-slave',
         
         stage('Docker Build'){
             container('docker'){
-                script {
-                    docker.withRegistry('https://localhost:5000') {
-                        appImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAGS}")
-					    appImage.push("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAGS}")
-                    }
+                withRegistry('https://localhost:5000') {
+                    build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAGS}")
+                    push("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAGS}")
                 }
             }
         }
