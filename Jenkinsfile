@@ -21,12 +21,13 @@ podTemplate(
     node('jenkins-slave') {
         stage('Clone repository') {
             container('git') {
-                checkout([$class: 'GitSCM',
-                    branches: [[name: '*/*']],
-                    userRemoteConfigs: [
-                        [url: '$githubRepository', credentialsId: '$githubCredential']
-                    ],
-                ])
+                checkout scm
+                //checkout([$class: 'GitSCM',
+                //    branches: [[name: '*/*']],
+                //    userRemoteConfigs: [
+                //        [url: '$githubRepository', credentialsId: '$githubCredential']
+                //    ],
+                //])
             }
         }
 	
