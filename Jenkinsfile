@@ -62,7 +62,7 @@ podTemplate(
 				    try {
 						sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
 					}
-					catch {
+					catch(e) {
 					    sh "kubectl delete validatingwebhookconfiguration ingress-nginx-admission"
 						sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
 					}
