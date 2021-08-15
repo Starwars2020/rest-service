@@ -1,4 +1,4 @@
-def NAMESPACE = "jenkins"
+def NAMESPACE = "default"
 def dockerRegistry = "localhost:5000"
 def dockerRegistryCredential = ""
 def githubRepository = "https://github.com/Starwars2020/rest-service.git"
@@ -50,6 +50,17 @@ podTemplate(
                 withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
                     docker.image("$dockerImageName:$dockerImageTags").push()
                 }
+            }
+        }
+		
+        stage('Run kubectl') {
+            container('kubectl') {
+                sh "kubectl delete -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
+                sh "kubectl delete -f rest-sample-app-service.yaml -n ${NAMESPACE}"
+                sh "kubectl delete -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
+                sh "kubectl create -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
+                sh "kubectl create -f rest-sample-app-service.yaml -n ${NAMESPACE}"
+                sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
             }
         }
     }
