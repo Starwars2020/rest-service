@@ -54,16 +54,17 @@ podTemplate(
 		
             stage('Run kubectl') {
                 container('kubectl') {
+                    sh "kubectl delete -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
+                    sh "kubectl delete -f rest-sample-app-service.yaml -n ${NAMESPACE}"
+                    sh "kubectl delete -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
+                    sh "kubectl create -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
+                    sh "kubectl create -f rest-sample-app-service.yaml -n ${NAMESPACE}"
 				    try {
-                        sh "kubectl delete -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
-                        sh "kubectl delete -f rest-sample-app-service.yaml -n ${NAMESPACE}"
-                        sh "kubectl delete -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
-					    sh "kubectl delete validatingwebhookconfiguration ingress-nginx-admission"
+						sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
 					}
-					finally {
-                        sh "kubectl create -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
-                        sh "kubectl create -f rest-sample-app-service.yaml -n ${NAMESPACE}"
-                        sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
+					catch {
+					    sh "kubectl delete validatingwebhookconfiguration ingress-nginx-admission"
+						sh "kubectl create -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
 					}
                 }
             }
