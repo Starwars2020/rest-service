@@ -22,45 +22,41 @@ podTemplate(
         def dockerImageTags = "1.0"
         def DATE = new Date();
 
-        try {
-            stage('Clone repository') {
-                container('git') {
-                    checkout scm
-                }
+        stage('Clone repository') {
+            container('git') {
+                checkout scm
             }
+        }
 	
-            stage('Build a gradle project'){
-                container('gradle'){
-                    sh 'chmod 755 gradlew'
-                    sh './gradlew clean build'
-                }
+        stage('Build a gradle project'){
+            container('gradle'){
+                sh 'chmod 755 gradlew'
+                sh './gradlew clean build'
             }
+        }
 
-            stage('Build docker image') {
-                container('docker') {
-                    withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
-                        sh "docker build -t ${dockerImageName}:${dockerImageTags} -f ./Dockerfile ."
-                    }
+        stage('Build docker image') {
+            container('docker') {
+                withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
+                    sh "docker build -t ${dockerImageName}:${dockerImageTags} -f ./Dockerfile ."
                 }
             }
+        }
 
-            stage('Push docker image') {
-                container('docker') {
-                    withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
-                        docker.image("$dockerImageName:$dockerImageTags").push()
-                    }
+        stage('Push docker image') {
+            container('docker') {
+                withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
+                    docker.image("$dockerImageName:$dockerImageTags").push()
                 }
             }
+        }
 		
-            stage('Run kubectl') {
-                container('kubectl') {
-                    sh "kubectl apply -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
-                    sh "kubectl apply -f rest-sample-app-service.yaml -n ${NAMESPACE}"
-                    sh "kubectl apply -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
-                }
+        stage('Run kubectl') {
+            container('kubectl') {
+                sh "kubectl apply -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
+                sh "kubectl apply -f rest-sample-app-service.yaml -n ${NAMESPACE}"
+                sh "kubectl apply -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
             }
-		} catch(e) {
-            currentBuild.result = "FAILED"
         }
     }
 }
