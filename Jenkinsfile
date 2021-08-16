@@ -19,7 +19,7 @@ podTemplate(
         def dockerRegistryCredential = ""
         def dockerImageName = "localhost:5000/rest-sample-app"
         def dockerImageTags = "1.0"
-        def NAMESPACE = "default"
+        def nameSpace = "default"
 
         stage('Clone repository') {
             container('git') {
@@ -52,9 +52,9 @@ podTemplate(
 		
         stage('Run kubectl') {
             container('kubectl') {
-                sh "kubectl apply -f rest-sample-app-deployment.yaml -n ${NAMESPACE}"
-                sh "kubectl apply -f rest-sample-app-service.yaml -n ${NAMESPACE}"
-                sh "kubectl apply -f rest-sample-app-ingress.yaml -n ${NAMESPACE}"
+                sh "kubectl apply -f rest-sample-app-deployment.yaml -n ${nameSpace}"
+                sh "kubectl apply -f rest-sample-app-service.yaml -n ${nameSpace}"
+                sh "kubectl apply -f rest-sample-app-ingress.yaml -n ${nameSpace}"
             }
         }
     }
