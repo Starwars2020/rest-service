@@ -13,14 +13,13 @@ podTemplate(
             hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'), 
         ]) {
     node(label) {
-        def NAMESPACE = "default"
         def githubRepository = "https://github.com/Starwars2020/rest-service.git"
         def githubCredential = "github-api-token"
         def dockerRegistry = "localhost:5000"
         def dockerRegistryCredential = ""
         def dockerImageName = "localhost:5000/rest-sample-app"
         def dockerImageTags = "1.0"
-        def DATE = new Date();
+        def NAMESPACE = "default"
 
         stage('Clone repository') {
             container('git') {
@@ -37,7 +36,7 @@ podTemplate(
 
         stage('Build docker image') {
             container('docker') {
-                withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
+                withDockerRegistry([ credentialsId: "${dockerRegistryCredential}", url: "http://${dockerRegistry}" ]) {
                     sh "docker build -t ${dockerImageName}:${dockerImageTags} -f ./Dockerfile ."
                 }
             }
@@ -45,8 +44,8 @@ podTemplate(
 
         stage('Push docker image') {
             container('docker') {
-                withDockerRegistry([ credentialsId: "$dockerRegistryCredential", url: "http://$dockerRegistry" ]) {
-                    docker.image("$dockerImageName:$dockerImageTags").push()
+                withDockerRegistry([ credentialsId: "${dockerRegistryCredential}", url: "http://${dockerRegistry}" ]) {
+                    docker.image("${dockerImageName}:${dockerImageTags}").push()
                 }
             }
         }
